@@ -1,9 +1,9 @@
-function [img_out] = MNIST_resize(img, long_border_resize, height_out, width_out)
+function [img_out] = MNIST_resize(img, long_border_roi_resize, height_out, width_out)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Perform a MNIST style resize for simple images (e.g., binary digits)
 % Input:
-%       img: input image, should be gray scale (background = 0, foreground > 0)
-%       long_border_resize: size of the long border of foreground after resized
+%       img: input image, should be gray scale (background = 0, ROI > 0)
+%       long_border_roi_resize: long-border size of ROI after resized
 %       height_out: height of output image
 %       width_out: width of output image
 %
@@ -15,9 +15,13 @@ function [img_out] = MNIST_resize(img, long_border_resize, height_out, width_out
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+if long_border_roi_resize >= max(height_out, width_out)
+    error('Long-border of ROI should not exceed the long-border of image!');
+end
+
 [row_img, col_img] = find(img > 0);
 long_border = max(max(row_img) - min(row_img) + 1, max(col_img) - min(col_img) + 1);
-resize_ratio = long_border_resize / long_border;
+resize_ratio = long_border_roi_resize / long_border;
 img_small = imresize(img, resize_ratio);
 
 % centerized image
