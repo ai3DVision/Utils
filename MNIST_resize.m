@@ -38,7 +38,7 @@ dx = center_x - x0 + 1;
 dy = center_y - y0 + 1;
 
 img_out = zeros(height_out, width_out);
-x = floor(width_out / 2) - dx;
-y = floor(height_out / 2) - dy;
+x = max(floor(width_out / 2) - dx, 1);
+y = max(floor(height_out / 2) - dy, 1);
 img_out(y : y + roi_height - 1, x : x + roi_width - 1) =  ...
     img_small(y0 : y0 + roi_height - 1, x0 : x0 + roi_width - 1 );
